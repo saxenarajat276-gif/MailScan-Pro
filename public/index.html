@@ -1,0 +1,1192 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MailScan Pro | Email Exposure Intelligence</title>
+
+<style>
+
+:root {
+    --bg: #080d18;
+    --card: #111a2b;
+    --card2: #151f32;
+    --border: #25334a;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --blue: #3b82f6;
+    --cyan: #22d3ee;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, Segoe UI, Arial, sans-serif;
+    min-height: 100vh;
+}
+
+.container {
+    width: 92%;
+    max-width: 1250px;
+    margin: auto;
+}
+
+/* NAVBAR */
+
+.navbar {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    background: rgba(8,13,24,0.95);
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--cyan);
+}
+
+.nav-status {
+    color: var(--green);
+    font-size: 13px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    margin-right: 7px;
+}
+
+/* HERO */
+
+.hero {
+    text-align: center;
+    padding: 75px 15px 45px;
+}
+
+.badge {
+    display: inline-block;
+    border: 1px solid #24527d;
+    background: #10233d;
+    color: var(--cyan);
+    border-radius: 30px;
+    padding: 8px 16px;
+    font-size: 12px;
+    margin-bottom: 23px;
+    letter-spacing: 1px;
+}
+
+.hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+.hero h1 span {
+    color: var(--cyan);
+}
+
+.hero p {
+    max-width: 680px;
+    margin: auto;
+    color: var(--muted);
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+/* SCANNER */
+
+.scanner-card {
+    max-width: 850px;
+    margin: 0 auto 55px;
+    background: linear-gradient(145deg, #14213a, #0e1728);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+}
+
+.scanner-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.scanner-card p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 22px;
+}
+
+.input-group {
+    display: flex;
+    gap: 12px;
+}
+
+.input-group input {
+    flex: 1;
+    min-width: 0;
+    background: #080f1d;
+    border: 1px solid var(--border);
+    padding: 17px;
+    border-radius: 9px;
+    outline: none;
+    color: white;
+    font-size: 15px;
+}
+
+.input-group input:focus {
+    border-color: var(--cyan);
+}
+
+.scan-btn {
+    background: linear-gradient(135deg, #2563eb, #0891b2);
+    border: none;
+    padding: 0 28px;
+    border-radius: 9px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.scan-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(34,211,238,0.2);
+}
+
+.scan-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.privacy-note {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 16px;
+}
+
+/* LOADING */
+
+.loading {
+    display: none;
+    text-align: center;
+    padding: 25px;
+    color: var(--cyan);
+}
+
+.loader {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #25334a;
+    border-top: 3px solid var(--cyan);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ERROR */
+
+.error-box {
+    display: none;
+    background: #35151b;
+    border: 1px solid #7f1d1d;
+    color: #fecaca;
+    padding: 15px;
+    border-radius: 9px;
+    margin-bottom: 25px;
+}
+
+/* RESULTS */
+
+.results {
+    display: none;
+    padding-bottom: 60px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.section-heading h2 {
+    font-size: 23px;
+}
+
+.section-heading p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+/* STATS */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 17px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 22px;
+}
+
+.stat-card .label {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 13px;
+}
+
+.stat-card .value {
+    font-size: 29px;
+    font-weight: 800;
+}
+
+.stat-card .sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+}
+
+/* REPORT */
+
+.report-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.report-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.report-top h3 {
+    font-size: 18px;
+}
+
+.risk-badge {
+    padding: 8px 14px;
+    border-radius: 20px;
+    background: #263044;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.report-message {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 16px;
+    line-height: 1.7;
+}
+
+/* TABLE */
+
+.table-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.table-header {
+    padding: 22px;
+    border-bottom: 1px solid var(--border);
+}
+
+.table-header h3 {
+    font-size: 17px;
+}
+
+.table-header p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 7px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px;
+}
+
+th {
+    text-align: left;
+    padding: 17px;
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    background: #0d1728;
+    letter-spacing: 0.5px;
+}
+
+td {
+    padding: 18px 17px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+}
+
+tbody tr:hover {
+    background: #17243a;
+}
+
+.platform-name {
+    font-weight: 700;
+    color: white;
+}
+
+.source-tag {
+    color: var(--cyan);
+    background: #123047;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+}
+
+.status-tag {
+    color: #fbbf24;
+    background: #382d16;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+}
+
+.risk-tag {
+    color: var(--muted);
+    background: #253044;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+}
+
+.empty-row {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+}
+
+/* INFO */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 55px 0;
+}
+
+.info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 24px;
+}
+
+.info-icon {
+    font-size: 25px;
+    margin-bottom: 16px;
+}
+
+.info-card h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.info-card p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* FOOTER */
+
+footer {
+    border-top: 1px solid var(--border);
+    padding: 30px 0;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.8;
+}
+
+footer strong {
+    color: var(--cyan);
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 850px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media(max-width: 550px) {
+
+    .hero {
+        padding-top: 50px;
+    }
+
+    .scanner-card {
+        padding: 20px;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-group input {
+        width: 100%;
+    }
+
+    .scan-btn {
+        padding: 16px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 15px;
+    }
+
+    .stat-card .value {
+        font-size: 23px;
+    }
+
+}
+
+/* SUCCESS MESSAGE */
+
+.success-text {
+    color: var(--green);
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+<div class="container nav-content">
+
+    <div class="logo">
+        MailScan<span>Pro</span>
+    </div>
+
+    <div class="nav-status">
+        <span class="status-dot"></span>
+        Security Scanner
+    </div>
+
+</div>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="badge">
+        EMAIL EXPOSURE INTELLIGENCE
+    </div>
+
+    <h1>
+        Check Your Email's <span>Security</span>
+    </h1>
+
+    <p>
+        Discover whether your email address appears in
+        known data breach records. Identify exposed platforms
+        and understand your digital exposure.
+    </p>
+
+</section>
+
+
+<!-- SCANNER -->
+
+<main class="container">
+
+<section class="scanner-card">
+
+    <h2>Scan Your Email Address</h2>
+
+    <p>
+        Enter an email address to check known breach records.
+    </p>
+
+    <form id="scanForm">
+
+        <div class="input-group">
+
+            <input
+                type="email"
+                id="emailInput"
+                placeholder="Enter your email address"
+                autocomplete="email"
+                required
+            >
+
+            <button
+                type="submit"
+                class="scan-btn"
+                id="scanButton"
+            >
+                Scan Email →
+            </button>
+
+        </div>
+
+    </form>
+
+    <div class="privacy-note">
+        🔒 Your email is used only to perform the requested scan.
+        Results depend on the available breach-data provider.
+    </div>
+
+</section>
+
+
+<!-- LOADING -->
+
+<div class="loading" id="loading">
+
+    <div class="loader"></div>
+
+    <p>Scanning known breach records...</p>
+
+</div>
+
+
+<!-- ERROR -->
+
+<div class="error-box" id="errorBox"></div>
+
+
+<!-- RESULTS -->
+
+<section class="results" id="results">
+
+    <div class="section-heading">
+
+        <div>
+            <h2>Scan Report</h2>
+            <p id="reportSubtitle">
+                Email exposure report
+            </p>
+        </div>
+
+        <div class="risk-badge" id="reportStatus">
+            Scan Completed
+        </div>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="label">Known Breaches</div>
+
+            <div class="value" id="breachCount">0</div>
+
+            <div class="sub">Matching breach records</div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="label">Associated Platforms</div>
+
+            <div class="value" id="platformCount">0</div>
+
+            <div class="sub">Unique platform names</div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="label">Exposed Data Types</div>
+
+            <div class="value" id="exposureCount">—</div>
+
+            <div class="sub">Not provided by basic API</div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="label">Affected Records</div>
+
+            <div class="value" id="recordCount">—</div>
+
+            <div class="sub">Not provided by basic API</div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RISK REPORT -->
+
+    <div class="report-card">
+
+        <div class="report-top">
+
+            <h3>Security Risk Assessment</h3>
+
+            <span class="risk-badge" id="riskLabel">
+                Not Assessed
+            </span>
+
+        </div>
+
+        <p class="report-message" id="riskMessage">
+            Risk information is not available from the basic
+            breach-check endpoint. A platform match does not
+            establish the severity of an exposure.
+        </p>
+
+    </div>
+
+
+    <!-- PLATFORM TABLE -->
+
+    <div class="table-card">
+
+        <div class="table-header">
+
+            <h3>Platforms Associated With This Email</h3>
+
+            <p>
+                Known breach associations returned by the data provider.
+            </p>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Platform Name</th>
+                        <th>Detection Source</th>
+                        <th>Status</th>
+                        <th>Exposure Type</th>
+                        <th>Risk</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="resultsBody">
+
+                    <tr>
+                        <td colspan="5" class="empty-row">
+                            No scan performed yet.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="report-card">
+
+        <h3>Important Information</h3>
+
+        <p class="report-message" id="disclaimer">
+            Results show known breach associations only.
+            They do not confirm that an account is currently
+            active on any listed platform.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="info-grid">
+
+    <div class="info-card">
+
+        <div class="info-icon">🔍</div>
+
+        <h3>Breach Detection</h3>
+
+        <p>
+            Check whether an email address appears in
+            available known breach records.
+        </p>
+
+    </div>
+
+    <div class="info-card">
+
+        <div class="info-icon">🛡️</div>
+
+        <h3>Exposure Awareness</h3>
+
+        <p>
+            Understand which platforms are associated
+            with known breach records.
+        </p>
+
+    </div>
+
+    <div class="info-card">
+
+        <div class="info-icon">📊</div>
+
+        <h3>Clear Reporting</h3>
+
+        <p>
+            View platform associations and available
+            breach information in one dashboard.
+        </p>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="container">
+
+        <strong>MailScan Pro</strong> — Email Exposure Intelligence
+
+        <br>
+
+        Powered by XposedOrNot breach-data services.
+
+        <br><br>
+
+        MailScan Pro does not enumerate every website where
+        an email is registered. It reports only information
+        returned by its configured breach-data provider.
+
+    </div>
+
+</footer>
+
+
+<script>
+
+// ==========================================
+// ELEMENTS
+// ==========================================
+
+const scanForm = document.getElementById("scanForm");
+
+const emailInput = document.getElementById("emailInput");
+
+const scanButton = document.getElementById("scanButton");
+
+const loading = document.getElementById("loading");
+
+const errorBox = document.getElementById("errorBox");
+
+const results = document.getElementById("results");
+
+const resultsBody = document.getElementById("resultsBody");
+
+
+// ==========================================
+// SAFE TEXT HELPER
+// ==========================================
+
+function escapeHTML(value) {
+
+    return String(value ?? "").replace(
+        /[&<>"']/g,
+        char => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        })[char]
+    );
+
+}
+
+
+// ==========================================
+// NUMBER FORMAT
+// ==========================================
+
+function formatNumber(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+        return "—";
+    }
+
+    const number = Number(value);
+
+    if (!Number.isFinite(number)) {
+        return "—";
+    }
+
+    return number.toLocaleString("en-IN");
+
+}
+
+
+// ==========================================
+// SHOW ERROR
+// ==========================================
+
+function showError(message) {
+
+    errorBox.textContent = message;
+
+    errorBox.style.display = "block";
+
+}
+
+
+// ==========================================
+// LOADING STATE
+// ==========================================
+
+function setLoading(state) {
+
+    loading.style.display = state ? "block" : "none";
+
+    scanButton.disabled = state;
+
+    scanButton.textContent = state
+        ? "Scanning..."
+        : "Scan Email →";
+
+}
+
+
+// ==========================================
+// RENDER RESULTS
+// ==========================================
+
+function renderResults(data) {
+
+    results.style.display = "block";
+
+    const platforms = Array.isArray(data.platforms)
+        ? data.platforms
+        : Array.isArray(data.breaches)
+            ? data.breaches
+            : [];
+
+
+    // BASIC STATISTICS
+
+    document.getElementById("breachCount").textContent =
+        formatNumber(data.summary?.breaches ?? platforms.length);
+
+    document.getElementById("platformCount").textContent =
+        formatNumber(
+            data.summary?.uniquePlatforms ?? platforms.length
+        );
+
+    document.getElementById("exposureCount").textContent =
+        formatNumber(data.summary?.exposures);
+
+    document.getElementById("recordCount").textContent =
+        formatNumber(data.summary?.affectedRecords);
+
+
+    // REPORT TITLE
+
+    document.getElementById("reportSubtitle").textContent =
+        "Results for " + (data.email || "submitted email");
+
+
+    // RISK ASSESSMENT
+
+    const riskLabel = document.getElementById("riskLabel");
+
+    const riskMessage = document.getElementById("riskMessage");
+
+    riskLabel.textContent =
+        data.riskLevel || "Not assessed";
+
+    if (data.riskScore !== null && data.riskScore !== undefined) {
+
+        riskMessage.textContent =
+            "Available risk score: " + data.riskScore +
+            ". Risk assessment depends on the data supplied by the provider.";
+
+    } else {
+
+        riskMessage.textContent =
+            "A reliable risk score is not available from the basic breach-check API. " +
+            "The presence of a platform name does not establish the severity of exposure.";
+
+    }
+
+
+    // REPORT STATUS
+
+    document.getElementById("reportStatus").textContent =
+        data.found
+            ? "Exposure Records Found"
+            : "No Matching Records";
+
+
+    // TABLE
+
+    if (platforms.length === 0) {
+
+        resultsBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty-row">
+                    No matching breach records were returned by the provider.
+                </td>
+            </tr>
+        `;
+
+    } else {
+
+        resultsBody.innerHTML = platforms.map(item => {
+
+            const platform =
+                typeof item === "string"
+                    ? item
+                    : item.platform ||
+                      item.name ||
+                      item.title ||
+                      "Unknown";
+
+            const source =
+                typeof item === "string"
+                    ? data.source || "XposedOrNot"
+                    : item.source || data.source || "XposedOrNot";
+
+            const status =
+                typeof item === "string"
+                    ? "Known breach exposure"
+                    : item.status || "Known breach exposure";
+
+            const exposedData =
+                typeof item === "string"
+                    ? "Not provided"
+                    : Array.isArray(item.exposedData)
+                        ? item.exposedData.join(", ") || "Not provided"
+                        : item.exposedData || "Not provided";
+
+            const risk =
+                typeof item === "string"
+                    ? "Not assessed"
+                    : item.risk || item.riskLevel || "Not assessed";
+
+            return `
+                <tr>
+
+                    <td class="platform-name">
+                        ${escapeHTML(platform)}
+                    </td>
+
+                    <td>
+                        <span class="source-tag">
+                            ${escapeHTML(source)}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="status-tag">
+                            ${escapeHTML(status)}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${escapeHTML(exposedData)}
+                    </td>
+
+                    <td>
+                        <span class="risk-tag">
+                            ${escapeHTML(risk)}
+                        </span>
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+    }
+
+
+    // DISCLAIMER
+
+    document.getElementById("disclaimer").textContent =
+        data.disclaimer ||
+        "These are known breach records. They do not prove that an account is currently active on the listed platform.";
+
+}
+
+
+// ==========================================
+// SCAN EMAIL
+// ==========================================
+
+scanForm.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const email = emailInput.value.trim();
+
+    errorBox.style.display = "none";
+
+    results.style.display = "none";
+
+    if (!email) {
+
+        showError("Please enter an email address.");
+
+        return;
+
+    }
+
+    setLoading(true);
+
+    try {
+
+        const response = await fetch("/api/scan", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                email: email
+
+            })
+
+        });
+
+
+        const data = await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error || "Unable to complete scan."
+            );
+
+        }
+
+
+        renderResults(data);
+
+        results.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+        });
+
+
+    } catch (error) {
+
+        showError(
+            error.message ||
+            "Something went wrong. Please try again."
+        );
+
+    } finally {
+
+        setLoading(false);
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
+```
